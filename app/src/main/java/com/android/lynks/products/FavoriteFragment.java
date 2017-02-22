@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,9 @@ public class FavoriteFragment  extends Fragment {
 
     @BindView(R.id.grid2)
     GridView grid2;
+
+    @BindView(R.id.nofav)
+    TextView nofav;
     ArrayList<Product> list = new ArrayList<>();
     public FavoriteFragment() {
     }
@@ -31,8 +35,16 @@ public class FavoriteFragment  extends Fragment {
         ButterKnife.bind(this, rootView);
         MySQLiteHelper db = new MySQLiteHelper(getActivity());
         list = db.getAllFavorites();
-        FavoriteAdapter adapter = new FavoriteAdapter(getActivity(), R.layout.favorite_listview, list);
-        grid2.setAdapter(adapter);
+        if (list !=null && list.size()>0) {
+            nofav.setVisibility(View.GONE);
+            grid2.setVisibility(View.VISIBLE);
+            FavoriteAdapter adapter = new FavoriteAdapter(getActivity(), R.layout.favorite_listview, list);
+            grid2.setAdapter(adapter);
+        }
+        else {
+            nofav.setVisibility(View.VISIBLE);
+            grid2.setVisibility(View.GONE);
+        }
 
         return rootView;
     }
